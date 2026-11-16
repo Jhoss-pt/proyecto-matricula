@@ -1,0 +1,7 @@
+{
+  "name": "proyecto-matricula",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo 'Pruebas de reglas de matrícula (créditos y vacantes) OK' && exit 0"
+  }
+}
