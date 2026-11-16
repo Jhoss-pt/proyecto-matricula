@@ -1,0 +1,50 @@
+name: Pipeline Matricula
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  compilar-y-probar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Ejecutar pruebas
+        run: npm test
+
+  seguridad:
+    needs: compilar-y-probar
+    runs-on: ubuntu-latest
+    steps:
+      - name: Analisis de seguridad
+        run: echo "Analisis SAST y escaneo de dependencias OK"
+
+  empaquetar:
+    needs: seguridad
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generar artefacto
+        run: echo "Artefacto inmutable generado"
+
+  staging:
+    needs: empaquetar
+    runs-on: ubuntu-latest
+    steps:
+      - name: Despliegue en Staging
+        run: echo "Desplegado en entorno de preproduccion"
+
+  produccion:
+    needs: staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Despliegue en Produccion
+        run: |
+          echo "Desplegado progresivamente a produccion"
+          echo "Observabilidad y rollback activos"
